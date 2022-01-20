@@ -10,6 +10,7 @@
 
 namespace ModernJukebox\Bundle\Common\Controller\ArgumentResolver;
 
+use ModernJukebox\Bundle\Common\Attribute\FromBody;
 use Symfony\Component\HttpFoundation\Exception\BadRequestException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Controller\ArgumentValueResolverInterface;
@@ -20,18 +21,14 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class BodyDataValueResolver implements ArgumentValueResolverInterface
 {
-
     private SerializerInterface $serializer;
 
     private ValidatorInterface $validator;
 
-    private string $namespace;
-
-    public function __construct(SerializerInterface $serializer, ValidatorInterface $validator, string $namespace)
+    public function __construct(SerializerInterface $serializer, ValidatorInterface $validator)
     {
         $this->serializer = $serializer;
         $this->validator = $validator;
-        $this->namespace = $namespace;
     }
 
     public function resolve(Request $request, ArgumentMetadata $argument): iterable
@@ -68,16 +65,14 @@ class BodyDataValueResolver implements ArgumentValueResolverInterface
             return false;
         }
 
+        $attributes = $argument->getAttributes(FromBody::class);
+
+        if (empty($attributes)) {
+            return false;
+        }
+
         $type = $argument->getType();
 
-        if (null === $type) {
-            return false;
-        }
-
-        if (!str_starts_with($type, $this->namespace)) {
-            return false;
-        }
-
-        return true;
+        return null !== $type;
     }
 }
