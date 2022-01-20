@@ -1,0 +1,47 @@
+{
+    "name": "modern-jukebox/common-bundle",
+    "description": "Provides common classes and functions for the Modern Jukebox.",
+    "license": "MIT",
+    "type": "symfony-bundle",
+    "keywords": [
+        "symfony",
+        "modern-jukebox",
+        "bundle"
+    ],
+    "authors": [
+        {
+            "name": "Jason Schilling",
+            "email": "jason@sourecode.dev"
+        }
+    ],
+    "require": {
+        "php": "^8.1",
+        "symfony/config": "^6.0",
+        "symfony/dependency-injection": "^6.0",
+        "symfony/http-foundation": "^6.0",
+        "symfony/http-kernel": "^6.0",
+        "symfony/serializer": "^6.0",
+        "symfony/validator": "^6.0"
+    },
+    "require-dev": {
+        "ergebnis/composer-normalize": "^2.23",
+        "friendsofphp/php-cs-fixer": "^3.5"
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "autoload": {
+        "psr-4": {
+            "ModernJukebox\\Bundle\\Common\\": "src"
+        }
+    },
+    "config": {
+        "allow-plugins": {
+            "ergebnis/composer-normalize": true
+        }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "0.1-dev"
+        }
+    }
+}
