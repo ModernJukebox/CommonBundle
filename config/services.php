@@ -8,7 +8,7 @@
  * file that was distributed with this source code.
  */
 
-use ModernJukebox\Bundle\Common\ArgumentResolver\BodyDataValueResolver;
+use ModernJukebox\Bundle\Common\Controller\ArgumentResolver\BodyDataValueResolver;
 use ModernJukebox\Bundle\Common\EnvVarProcessor\EnvEnvVarProcessor;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use function Symfony\Component\DependencyInjection\Loader\Configurator\param;

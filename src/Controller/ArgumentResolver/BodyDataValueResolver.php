@@ -8,7 +8,7 @@
  * file that was distributed with this source code.
  */
 
-namespace ModernJukebox\Bundle\Common\ArgumentResolver;
+namespace ModernJukebox\Bundle\Common\Controller\ArgumentResolver;
 
 use Symfony\Component\HttpFoundation\Exception\BadRequestException;
 use Symfony\Component\HttpFoundation\Request;
