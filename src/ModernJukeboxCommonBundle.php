@@ -15,6 +15,6 @@ use Symfony\Component\HttpKernel\Bundle\Bundle;
 /**
  * @author Jason Schilling <jason@sourecode.dev>
  */
-class ModernJukeboxMenuBundle extends Bundle
+class ModernJukeboxCommonBundle extends Bundle
 {
 }
