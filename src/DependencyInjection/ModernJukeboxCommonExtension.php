@@ -18,7 +18,7 @@ use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 /**
  * @author Jason Schilling <jason@sourecode.dev>
  */
-class ModernJukeboxMenuExtension extends Extension
+class ModernJukeboxCommonExtension extends Extension
 {
     public function load(array $configs, ContainerBuilder $container): void
     {
