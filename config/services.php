@@ -11,11 +11,16 @@
 use ModernJukebox\Bundle\Common\Controller\ArgumentResolver\BodyDataValueResolver;
 use ModernJukebox\Bundle\Common\EnvVarProcessor\EnvEnvVarProcessor;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use function Symfony\Component\DependencyInjection\Loader\Configurator\service;
 
 return static function (ContainerConfigurator $container) {
     $services = $container->services();
 
     $services->set('modern_jukebox.common.argument_resolver.body_data', BodyDataValueResolver::class)
+        ->args([
+            service('serializer'),
+            service('validator'),
+        ])
         ->tag('controller.argument_value_resolver');
 
     $services->set('modern_jukebox.common.env_var_processor.env_var', EnvEnvVarProcessor::class)
