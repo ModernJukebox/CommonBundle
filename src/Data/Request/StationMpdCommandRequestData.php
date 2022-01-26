@@ -1,10 +1,14 @@
 <?php
 
-namespace ModernJukebox\Bundle\Common\Data;
+namespace ModernJukebox\Bundle\Common\Data\Request;
 
+use ModernJukebox\Bundle\Common\Data\Response\StationMpdCommandResponseData;
 use Symfony\Component\Validator\Constraints as Assert;
 
-class MpdCommandData
+/**
+ * @see StationMpdCommandResponseData
+ */
+class StationMpdCommandRequestData
 {
     #[Assert\NotBlank]
     public string $command;
