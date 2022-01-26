@@ -20,18 +20,29 @@
         "symfony/dependency-injection": "^6.0",
         "symfony/http-foundation": "^6.0",
         "symfony/http-kernel": "^6.0",
+        "symfony/property-access": "^6.0",
         "symfony/serializer": "^6.0",
+        "symfony/uid": "^6.0",
         "symfony/validator": "^6.0"
     },
     "require-dev": {
         "ergebnis/composer-normalize": "^2.23",
-        "friendsofphp/php-cs-fixer": "^3.5"
+        "friendsofphp/php-cs-fixer": "^3.5",
+        "phpunit/phpunit": "^9.5"
     },
     "minimum-stability": "dev",
     "prefer-stable": true,
     "autoload": {
         "psr-4": {
             "ModernJukebox\\Bundle\\Common\\": "src"
+        },
+        "exclude-from-classmap": [
+            "tests"
+        ]
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "ModernJukebox\\Bundle\\Common\\Tests\\": "tests"
         }
     },
     "config": {
