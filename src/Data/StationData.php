@@ -2,7 +2,8 @@
 
 namespace ModernJukebox\Bundle\Common\Data;
 
-use ModernJukebox\Bundle\Common\Enums\StationState;
+use ModernJukebox\Bundle\Common\Enums\StationClientState;
+use ModernJukebox\Bundle\Common\Enums\StationServerState;
 use Symfony\Component\Uid\Ulid;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -19,9 +20,14 @@ class StationData
     public string $name;
 
     #[Assert\NotBlank]
-    public StationState $state;
+    public StationClientState $clientState;
 
-    public ?string $error = null;
+    #[Assert\NotBlank]
+    public StationServerState $serverState;
+
+    public ?string $clientError = null;
+
+    public ?string $serverError = null;
 
     #[Assert\Valid]
     public StationPortsData $ports;
