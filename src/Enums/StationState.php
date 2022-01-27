@@ -34,6 +34,10 @@ enum StationState: string
      */
     case MAINTENANCE = 'maintenance';
     /*
+     * The station is currently in an error state.
+     */
+    case ERROR = 'error';
+    /*
      * The station is currently not available.
      */
     case OFFLINE = 'offline';

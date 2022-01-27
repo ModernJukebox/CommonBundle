@@ -21,6 +21,8 @@ class StationData
     #[Assert\NotBlank]
     public StationState $state;
 
+    public string $error;
+
     #[Assert\Valid]
     public StationPortsData $ports;
 

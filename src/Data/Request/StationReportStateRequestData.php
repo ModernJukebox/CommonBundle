@@ -13,4 +13,6 @@ class StationReportStateRequestData
 {
     #[Assert\NotBlank]
     public StationState $state;
+
+    public string $error = '';
 }
