@@ -1,0 +1,11 @@
+version: '3.5'
+
+services:
+    mock:
+        build:
+            context: docker
+            dockerfile: Dockerfile
+        ports:
+            - "80:80"
+        volumes:
+            - "./docker/app.js:/srv/app/app.js"
