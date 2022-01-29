@@ -10,6 +10,15 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class StationMpdCommandRequestData
 {
+    /**
+     * @var string[] $options
+     */
+    #[Assert\All([
+        new Assert\NotBlank(),
+        new Assert\Type('string'),
+    ])]
+    public array $options = [];
+
     #[Assert\NotBlank]
     public string $command;
 
