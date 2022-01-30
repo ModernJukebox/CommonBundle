@@ -30,7 +30,7 @@ return static function (ContainerConfigurator $container) {
 
     $services->set('modern_jukebox.common.argument_resolver.body_data', BodyDataValueResolver::class)
         ->args([
-            service('serializer'),
+            service('modern_jukebox.common.client.serializer'),
             service('validator'),
         ])
         ->tag('controller.argument_value_resolver');
