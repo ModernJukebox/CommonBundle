@@ -13,11 +13,20 @@ use Symfony\Component\Serializer\SerializerInterface;
 
 class SerializerFactory
 {
+    private DateTimeNormalizer $dateTimeNormalizer;
+
     private SerializerInterface $defaultSerializer;
 
-    public function __construct(SerializerInterface $defaultSerializer)
+    private ObjectNormalizer $objectNormalizer;
+
+    private UidNormalizer $uidNormalizer;
+
+    public function __construct(SerializerInterface $defaultSerializer, ObjectNormalizer $objectNormalizer, DateTimeNormalizer $dateTimeNormalizer, UidNormalizer $uidNormalizer)
     {
         $this->defaultSerializer = $defaultSerializer;
+        $this->objectNormalizer = $objectNormalizer;
+        $this->dateTimeNormalizer = $dateTimeNormalizer;
+        $this->uidNormalizer = $uidNormalizer;
     }
 
     public function create(bool $useDefaultSerializer = false): SerializerInterface
@@ -28,11 +37,11 @@ class SerializerFactory
 
         $encoders = [new JsonEncoder()];
         $normalizers = [
-            new UidNormalizer(),
-            new DateTimeNormalizer(),
+            $this->uidNormalizer,
+            $this->dateTimeNormalizer,
             new BackedEnumNormalizer(),
             new ArrayDenormalizer(),
-            new ObjectNormalizer(),
+            $this->objectNormalizer,
         ];
 
         return new Serializer($normalizers, $encoders);

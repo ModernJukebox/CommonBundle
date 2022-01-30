@@ -22,8 +22,8 @@ use ModernJukebox\Bundle\Common\Messenger\RemoteResponseBusFactory;
 use ModernJukebox\Bundle\Common\Messenger\RemoteResponseBusFactoryInterface;
 use ModernJukebox\Bundle\Common\Serializer\SerializerFactory;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-use Symfony\Component\Serializer\Serializer;
 use function Symfony\Component\DependencyInjection\Loader\Configurator\service;
+use Symfony\Component\Serializer\Serializer;
 
 return static function (ContainerConfigurator $container) {
     $services = $container->services();
@@ -88,9 +88,11 @@ return static function (ContainerConfigurator $container) {
     $services->set('modern_jukebox.common.client.serializer.factory', SerializerFactory::class)
         ->args([
             service('serializer'),
+            service('serializer.normalizer.object'),
+            service('serializer.normalizer.datetime'),
+            service('serializer.normalizer.uid'),
         ]);
 
     $services->set('modern_jukebox.common.client.serializer', Serializer::class)
         ->factory([service('modern_jukebox.common.client.serializer.factory'), 'create']);
-
 };
