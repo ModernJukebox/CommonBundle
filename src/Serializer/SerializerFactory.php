@@ -17,7 +17,7 @@ class SerializerFactory
         $this->defaultSerializer = $defaultSerializer;
     }
 
-    public function create(bool $useDefaultSerializer = true): SerializerInterface
+    public function create(bool $useDefaultSerializer = false): SerializerInterface
     {
         if ($useDefaultSerializer) {
             return $this->defaultSerializer;
