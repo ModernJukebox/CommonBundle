@@ -16,6 +16,10 @@ use ModernJukebox\Bundle\Common\Client\ClientFactory;
 use ModernJukebox\Bundle\Common\Client\ClientFactoryInterface;
 use ModernJukebox\Bundle\Common\Controller\ArgumentResolver\BodyDataValueResolver;
 use ModernJukebox\Bundle\Common\EnvVarProcessor\EnvEnvVarProcessor;
+use ModernJukebox\Bundle\Common\Messenger\RemoteRequestBusFactory;
+use ModernJukebox\Bundle\Common\Messenger\RemoteRequestBusFactoryInterface;
+use ModernJukebox\Bundle\Common\Messenger\RemoteResponseBusFactory;
+use ModernJukebox\Bundle\Common\Messenger\RemoteResponseBusFactoryInterface;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use function Symfony\Component\DependencyInjection\Loader\Configurator\service;
 
@@ -50,6 +54,20 @@ return static function (ContainerConfigurator $container) {
     $services->alias(
         ClientFactoryInterface::class,
         'modern_jukebox.common.client.factory'
+    )
+        ->public();
+
+    $services->set('modern_jukebox.common.messenger.request.factory', RemoteRequestBusFactory::class);
+    $services->alias(
+        RemoteRequestBusFactoryInterface::class,
+        'modern_jukebox.common.messenger.request.factory'
+    )
+        ->public();
+
+    $services->set('modern_jukebox.common.messenger.response.factory', RemoteResponseBusFactory::class);
+    $services->alias(
+        RemoteResponseBusFactoryInterface::class,
+        'modern_jukebox.common.messenger.response.factory'
     )
         ->public();
 };
