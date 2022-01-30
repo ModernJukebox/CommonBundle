@@ -20,7 +20,9 @@ use ModernJukebox\Bundle\Common\Messenger\RemoteRequestBusFactory;
 use ModernJukebox\Bundle\Common\Messenger\RemoteRequestBusFactoryInterface;
 use ModernJukebox\Bundle\Common\Messenger\RemoteResponseBusFactory;
 use ModernJukebox\Bundle\Common\Messenger\RemoteResponseBusFactoryInterface;
+use ModernJukebox\Bundle\Common\Serializer\SerializerFactory;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Symfony\Component\Serializer\Serializer;
 use function Symfony\Component\DependencyInjection\Loader\Configurator\service;
 
 return static function (ContainerConfigurator $container) {
@@ -53,7 +55,7 @@ return static function (ContainerConfigurator $container) {
     $services->set('modern_jukebox.common.client.factory', ClientFactory::class)
         ->args([
             service('http_client'),
-            service('serializer'),
+            service('modern_jukebox.common.client.serializer'),
             service('validator'),
         ]);
     $services->alias(
@@ -64,7 +66,7 @@ return static function (ContainerConfigurator $container) {
 
     $services->set('modern_jukebox.common.messenger.request.factory', RemoteRequestBusFactory::class)
         ->args([
-            service('serializer'),
+            service('modern_jukebox.common.client.serializer'),
             service('validator'),
         ]);
     $services->alias(
@@ -75,11 +77,20 @@ return static function (ContainerConfigurator $container) {
 
     $services->set('modern_jukebox.common.messenger.response.factory', RemoteResponseBusFactory::class)
         ->args([
-            service('serializer'),
+            service('modern_jukebox.common.client.serializer'),
         ]);
     $services->alias(
         RemoteResponseBusFactoryInterface::class,
         'modern_jukebox.common.messenger.response.factory'
     )
         ->public();
+
+    $services->set('modern_jukebox.common.client.serializer.factory', SerializerFactory::class)
+        ->args([
+            service('serializer'),
+        ]);
+
+    $services->set('modern_jukebox.common.client.serializer', Serializer::class)
+        ->factory([service('modern_jukebox.common.client.serializer.factory'), 'create']);
+
 };
