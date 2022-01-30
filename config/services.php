@@ -16,13 +16,16 @@ use ModernJukebox\Bundle\Common\Client\ClientFactory;
 use ModernJukebox\Bundle\Common\Client\ClientFactoryInterface;
 use ModernJukebox\Bundle\Common\Controller\ArgumentResolver\BodyDataValueResolver;
 use ModernJukebox\Bundle\Common\EnvVarProcessor\EnvEnvVarProcessor;
+use ModernJukebox\Bundle\Common\HttpClient\HttpClientFactory;
 use ModernJukebox\Bundle\Common\Messenger\RemoteRequestBusFactory;
 use ModernJukebox\Bundle\Common\Messenger\RemoteRequestBusFactoryInterface;
 use ModernJukebox\Bundle\Common\Messenger\RemoteResponseBusFactory;
 use ModernJukebox\Bundle\Common\Messenger\RemoteResponseBusFactoryInterface;
 use ModernJukebox\Bundle\Common\Serializer\SerializerFactory;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use function Symfony\Component\DependencyInjection\Loader\Configurator\env;
 use function Symfony\Component\DependencyInjection\Loader\Configurator\service;
+use Symfony\Component\HttpClient\HttpClient;
 use Symfony\Component\Serializer\Serializer;
 
 return static function (ContainerConfigurator $container) {
@@ -54,7 +57,7 @@ return static function (ContainerConfigurator $container) {
 
     $services->set('modern_jukebox.common.client.factory', ClientFactory::class)
         ->args([
-            service('http_client'),
+            service('modern_jukebox.common.client.http_client'),
             service('modern_jukebox.common.client.serializer'),
             service('validator'),
         ]);
@@ -93,6 +96,17 @@ return static function (ContainerConfigurator $container) {
             service('serializer.normalizer.uid'),
         ]);
 
+    $services->set('modern_jukebox.common.client.http_client.factory', HttpClientFactory::class)
+        ->args([
+            service('http_client'),
+        ]);
+
     $services->set('modern_jukebox.common.client.serializer', Serializer::class)
         ->factory([service('modern_jukebox.common.client.serializer.factory'), 'create']);
+
+    $services->set('modern_jukebox.common.client.http_client', HttpClient::class)
+        ->factory([service('modern_jukebox.common.client.http_client.factory'), 'create'])
+        ->args([
+            env('prod:APP_ENV'),
+        ]);
 };
