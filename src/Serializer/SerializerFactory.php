@@ -6,6 +6,7 @@ use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Normalizer\ArrayDenormalizer;
 use Symfony\Component\Serializer\Normalizer\BackedEnumNormalizer;
 use Symfony\Component\Serializer\Normalizer\DateTimeNormalizer;
+use Symfony\Component\Serializer\Normalizer\JsonSerializableNormalizer;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\Serializer\Normalizer\UidNormalizer;
 use Symfony\Component\Serializer\Serializer;
@@ -38,6 +39,7 @@ class SerializerFactory
         $encoders = [new JsonEncoder()];
         $normalizers = [
             $this->uidNormalizer,
+            new JsonSerializableNormalizer(),
             $this->dateTimeNormalizer,
             new BackedEnumNormalizer(),
             new ArrayDenormalizer(),
