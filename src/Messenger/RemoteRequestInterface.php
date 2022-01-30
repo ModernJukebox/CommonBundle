@@ -11,7 +11,7 @@ interface RemoteRequestInterface
     public function getRequest(): string;
 
     /**
-     * @return class-string
+     * @psalm-return class-string
      */
     public function getRequestType(): string;
 }

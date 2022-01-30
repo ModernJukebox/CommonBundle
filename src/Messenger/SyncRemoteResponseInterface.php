@@ -5,7 +5,7 @@ namespace ModernJukebox\Bundle\Common\Messenger;
 interface SyncRemoteResponseInterface extends RemoteResponseInterface
 {
     /**
-     * @return class-string
+     * @psalm-return class-string
      */
     public function getResponseType(): string;
 

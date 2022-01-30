@@ -30,7 +30,7 @@ class SyncRemoteResponse implements SyncRemoteResponseInterface
     }
 
     /**
-     * @return class-string
+     * @psalm-return class-string
      */
     public function getResponseType(): string
     {

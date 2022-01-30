@@ -15,13 +15,13 @@ class RemoteRequest implements RemoteRequestInterface
     private string $request;
 
     /**
-     * @var class-string $requestType
+     * @psalm-var class-string $requestType
      */
     #[Assert\NotBlank]
     private string $requestType;
 
     /**
-     * @param class-string $requestType
+     * @psalm-param class-string $requestType
      */
     public function __construct(RemoteMessageType $messageType, string $request, string $requestType)
     {
@@ -41,7 +41,7 @@ class RemoteRequest implements RemoteRequestInterface
     }
 
     /**
-     * @return class-string
+     * @psalm-return class-string
      */
     public function getRequestType(): string
     {
