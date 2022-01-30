@@ -50,21 +50,33 @@ return static function (ContainerConfigurator $container) {
     )
         ->public();
 
-    $services->set('modern_jukebox.common.client.factory', ClientFactory::class);
+    $services->set('modern_jukebox.common.client.factory', ClientFactory::class)
+        ->args([
+            service('http_client'),
+            service('serializer'),
+            service('validator'),
+        ]);
     $services->alias(
         ClientFactoryInterface::class,
         'modern_jukebox.common.client.factory'
     )
         ->public();
 
-    $services->set('modern_jukebox.common.messenger.request.factory', RemoteRequestBusFactory::class);
+    $services->set('modern_jukebox.common.messenger.request.factory', RemoteRequestBusFactory::class)
+        ->args([
+            service('serializer'),
+            service('validator'),
+        ]);
     $services->alias(
         RemoteRequestBusFactoryInterface::class,
         'modern_jukebox.common.messenger.request.factory'
     )
         ->public();
 
-    $services->set('modern_jukebox.common.messenger.response.factory', RemoteResponseBusFactory::class);
+    $services->set('modern_jukebox.common.messenger.response.factory', RemoteResponseBusFactory::class)
+        ->args([
+            service('serializer'),
+        ]);
     $services->alias(
         RemoteResponseBusFactoryInterface::class,
         'modern_jukebox.common.messenger.response.factory'

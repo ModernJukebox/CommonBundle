@@ -16,6 +16,6 @@ class RemoteResponseBusFactory implements RemoteResponseBusFactoryInterface
 
     public function create(MessageBusInterface $messageBus): RemoteResponseBusInterface
     {
-        return new RemoteResponseBus($this->messageBus, $this->serializer);
+        return new RemoteResponseBus($messageBus, $this->serializer);
     }
 }
