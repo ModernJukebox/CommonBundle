@@ -23,9 +23,9 @@ class RemoteRequest implements RemoteRequestInterface
     /**
      * @param class-string $requestType
      */
-    public function __construct(RemoteMessageType $type, string $request, string $requestType)
+    public function __construct(RemoteMessageType $messageType, string $request, string $requestType)
     {
-        $this->messageType = $type;
+        $this->messageType = $messageType;
         $this->request = $request;
         $this->requestType = $requestType;
     }
