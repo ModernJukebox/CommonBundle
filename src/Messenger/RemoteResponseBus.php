@@ -44,7 +44,7 @@ class RemoteResponseBus implements RemoteResponseBusInterface
             $responseData = $handledStamp->getResult();
 
             if (!is_object($responseData)) {
-                throw new RuntimeException('Response must be an object');
+                throw new RuntimeException('Response must be an object. Got: '.gettype($responseData));
             }
 
             $responseType = get_class($responseData);
