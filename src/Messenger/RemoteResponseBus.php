@@ -25,15 +25,16 @@ class RemoteResponseBus implements RemoteResponseBusInterface
      */
     public function handle(RemoteRequestInterface $remoteRequest, array $stamps = []): RemoteResponseInterface
     {
-        $type = $remoteRequest->getRequestType();
+        $messageType = $remoteRequest->getMessageType();
+        $requestType = $remoteRequest->getRequestType();
         $request = $remoteRequest->getRequest();
-        $message = $this->serializer->deserialize($request, $type, 'json');
+        $message = $this->serializer->deserialize($request, $requestType, 'json');
 
         // @todo better error handling
         // @todo https://github.com/symfony/symfony/pull/39306
         $envelope = $this->messageBus->dispatch($message, $stamps);
 
-        if (RemoteMessageType::SYNC === $remoteRequest->getRequestType()) {
+        if (RemoteMessageType::SYNC === $messageType) {
             $handledStamp = $envelope->last(HandledStamp::class);
 
             if (!$handledStamp) {
@@ -52,7 +53,7 @@ class RemoteResponseBus implements RemoteResponseBusInterface
             return new SyncRemoteResponse($response, $responseType);
         }
 
-        if (RemoteMessageType::ASYNC === $remoteRequest->getRequestType()) {
+        if (RemoteMessageType::ASYNC === $messageType) {
             return new AsyncRemoteResponse(true);
         }
 
