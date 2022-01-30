@@ -1,7 +1,9 @@
 const express = require("express");
 const app = express();
+const {promises: fs} = require('fs');
+const path = require('path');
 
-app.use(express.urlencoded({ extended: false }))
+app.use(express.urlencoded({extended: false}))
 app.use(express.json());
 
 let counter = 0;
@@ -61,6 +63,50 @@ app.post("/post", (req, res, next) => {
     storage.set(id.toString(), entity);
 
     return res.status(201).json(storage.get(id.toString()));
+});
+
+const responses = {
+    sync: {
+        'ModernJukebox\\Bundle\\Common\\Tests\\Fixtures\\ListRequest': {
+            responseType: 'ModernJukebox\\Bundle\\Common\\Tests\\Fixtures\\ListResponse',
+            response: async (request) => {
+                const items = await fs.readdir(request.directory)
+                    .then(items => items.map(item => path.join(request.directory, item)));
+
+                return {
+                    items,
+                };
+            }
+        }
+    },
+    async: {
+        'ModernJukebox\\Bundle\\Common\\Tests\\Fixtures\\SendEmailRequest': {
+            response: true,
+        }
+    }
+}
+
+app.post("/messages", async (req, res, next) => {
+    const {messageType, requestType, request} = req.body;
+    const decodedRequest = JSON.parse(request);
+
+    console.log("messages", "request", req.body);
+
+    const handler = responses[messageType][requestType];
+    const data = typeof handler.response === "function" ? await handler.response(decodedRequest) : {success: handler.response};
+
+    const response = {
+        messageType,
+        response: JSON.stringify(data),
+    };
+
+    if(typeof handler.responseType !== "undefined") {
+        response.responseType = handler.responseType;
+    }
+
+    console.log("messages", "response", response);
+
+    return res.status(200).json(response);
 });
 
 app.listen(80, '0.0.0.0');

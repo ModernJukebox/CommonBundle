@@ -24,12 +24,14 @@
         "symfony/property-access": "^6.0",
         "symfony/serializer": "^6.0",
         "symfony/uid": "^6.0",
-        "symfony/validator": "^6.0"
+        "symfony/validator": "^6.0",
+        "symfony/messenger": "^6.0"
     },
     "require-dev": {
         "ergebnis/composer-normalize": "^2.23",
         "friendsofphp/php-cs-fixer": "^3.5",
-        "phpunit/phpunit": "^9.5"
+        "phpunit/phpunit": "^9.5",
+        "vimeo/psalm": "^4.19"
     },
     "minimum-stability": "dev",
     "prefer-stable": true,
@@ -48,7 +50,8 @@
     },
     "config": {
         "allow-plugins": {
-            "ergebnis/composer-normalize": true
+            "ergebnis/composer-normalize": true,
+            "composer/package-versions-deprecated": true
         }
     },
     "extra": {

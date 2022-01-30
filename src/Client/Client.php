@@ -38,7 +38,10 @@ class Client implements ClientInterface
         $this->validator = $validator;
     }
 
-    public function get(string $path, string $responseType = null): mixed
+    /**
+     * {@inheritDoc}
+     */
+    public function get(string $path, string|null $responseType = null): mixed
     {
         $request = Request::create($path, Request::METHOD_GET);
         $response = $this->request($request);
@@ -82,7 +85,7 @@ class Client implements ClientInterface
         ];
 
         if (in_array($method, [Request::METHOD_POST, Request::METHOD_PUT, Request::METHOD_PATCH], true)) {
-            $options['json'] = $content;
+            $options['body'] = $this->serializer->serialize($content, 'json');
         }
 
         return $this->httpClient->request($method, $url, $options);
@@ -126,7 +129,10 @@ class Client implements ClientInterface
         }
     }
 
-    public function post(string $path, string $responseType = null, mixed $data = null): mixed
+    /**
+     * {@inheritDoc}
+     */
+    public function post(string $path, string|null $responseType = null, mixed $data = null): mixed
     {
         if (null !== $data) {
             $constraintViolations = $this->validator->validate($data);
