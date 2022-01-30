@@ -23,7 +23,7 @@ class RemoteResponseBus implements RemoteResponseBusInterface
     /**
      * {@inheritDoc}
      */
-    public function handle(RemoteRequestInterface $remoteRequest): RemoteResponseInterface
+    public function handle(RemoteRequestInterface $remoteRequest, array $stamps = []): RemoteResponseInterface
     {
         $type = $remoteRequest->getRequestType();
         $request = $remoteRequest->getRequest();
@@ -31,7 +31,7 @@ class RemoteResponseBus implements RemoteResponseBusInterface
 
         // @todo better error handling
         // @todo https://github.com/symfony/symfony/pull/39306
-        $envelope = $this->messageBus->dispatch($message);
+        $envelope = $this->messageBus->dispatch($message, $stamps);
 
         if (RemoteMessageType::SYNC === $remoteRequest->getRequestType()) {
             $handledStamp = $envelope->last(HandledStamp::class);
