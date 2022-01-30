@@ -8,6 +8,12 @@
  * file that was distributed with this source code.
  */
 
+use ModernJukebox\Bundle\Common\Client\Authentication\AuthenticatorFactory;
+use ModernJukebox\Bundle\Common\Client\Authentication\AuthenticatorFactoryInterface;
+use ModernJukebox\Bundle\Common\Client\Authentication\StrategyFactory;
+use ModernJukebox\Bundle\Common\Client\Authentication\StrategyFactoryInterface;
+use ModernJukebox\Bundle\Common\Client\ClientFactory;
+use ModernJukebox\Bundle\Common\Client\ClientFactoryInterface;
 use ModernJukebox\Bundle\Common\Controller\ArgumentResolver\BodyDataValueResolver;
 use ModernJukebox\Bundle\Common\EnvVarProcessor\EnvEnvVarProcessor;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
@@ -25,4 +31,25 @@ return static function (ContainerConfigurator $container) {
 
     $services->set('modern_jukebox.common.env_var_processor.env_var', EnvEnvVarProcessor::class)
         ->tag('container.env_var_processor');
+
+    $services->set('modern_jukebox.common.client.authentication.authenticator.factory', AuthenticatorFactory::class);
+    $services->alias(
+        AuthenticatorFactoryInterface::class,
+        'modern_jukebox.common.client.authentication.authenticator.factory'
+    )
+        ->public();
+
+    $services->set('modern_jukebox.common.client.authentication.strategy.factory', StrategyFactory::class);
+    $services->alias(
+        StrategyFactoryInterface::class,
+        'modern_jukebox.common.client.authentication.strategy.factory'
+    )
+        ->public();
+
+    $services->set('modern_jukebox.common.client.factory', ClientFactory::class);
+    $services->alias(
+        ClientFactoryInterface::class,
+        'modern_jukebox.common.client.factory'
+    )
+        ->public();
 };
