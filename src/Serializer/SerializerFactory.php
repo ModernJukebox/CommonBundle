@@ -28,6 +28,9 @@ class SerializerFactory
 
         $encoders = [new JsonEncoder()];
         $normalizers = [
+            new UidNormalizer(),
+            new DateTimeNormalizer(),
+            new BackedEnumNormalizer(),
             new ArrayDenormalizer(),
             new ObjectNormalizer(),
         ];
