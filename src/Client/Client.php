@@ -5,10 +5,6 @@ namespace ModernJukebox\Bundle\Common\Client;
 use ModernJukebox\Bundle\Common\Client\Authentication\AuthenticatorInterface;
 use ModernJukebox\Bundle\Common\Exception\InvalidArgumentException;
 use ModernJukebox\Bundle\Common\Exception\InvalidContentTypeException;
-use ModernJukebox\Bundle\Common\Exception\RequestFailedException;
-use Symfony\Component\HttpClient\Exception\ClientException;
-use Symfony\Component\HttpClient\Exception\RedirectionException;
-use Symfony\Component\HttpClient\Exception\ServerException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Validator\Exception\ValidationFailedException;
@@ -93,20 +89,16 @@ class Client implements ClientInterface
 
     private function validateResponse(Request $request, ResponseInterface $response): string
     {
-        try {
-            $content = $response->getContent(true);
+        $content = $response->getContent(true);
 
-            if (!$this->isJson($content)) {
-                $headers = $response->getHeaders();
-                $contentType = $headers['content-type'][0] ?? 'unknown';
+        if (!$this->isJson($content)) {
+            $headers = $response->getHeaders();
+            $contentType = $headers['content-type'][0] ?? 'unknown';
 
-                throw new InvalidContentTypeException($contentType, 'application/json');
-            }
-
-            return $content;
-        } catch (ServerException|ClientException|RedirectionException $exception) {
-            throw new RequestFailedException($request, $exception);
+            throw new InvalidContentTypeException($contentType, 'application/json');
         }
+
+        return $content;
     }
 
     private function validateResponseData(mixed $data): void
