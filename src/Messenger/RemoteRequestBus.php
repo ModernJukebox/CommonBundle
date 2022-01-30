@@ -4,7 +4,10 @@ namespace ModernJukebox\Bundle\Common\Messenger;
 
 use ModernJukebox\Bundle\Common\Client\ClientInterface;
 use ModernJukebox\Bundle\Common\Enums\RemoteMessageType;
+use ModernJukebox\Bundle\Common\Exception\InvalidArgumentException;
 use Symfony\Component\Serializer\SerializerInterface;
+use Symfony\Component\Validator\Exception\ValidationFailedException;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class RemoteRequestBus implements RemoteRequestBusInterface
 {
@@ -14,18 +17,23 @@ class RemoteRequestBus implements RemoteRequestBusInterface
 
     private SerializerInterface $serializer;
 
-    public function __construct(SerializerInterface $serializer, ClientInterface $client, string $messageEndpointPath)
+    private ValidatorInterface $validator;
+
+    public function __construct(SerializerInterface $serializer, ValidatorInterface $validator, ClientInterface $client, string $messageEndpointPath)
     {
         $this->serializer = $serializer;
         $this->client = $client;
         $this->messageEndpointPath = $messageEndpointPath;
+        $this->validator = $validator;
     }
 
     /**
      * {@inheritDoc}
      */
-    public function async(mixed $request): bool
+    public function async(object $request): bool
     {
+        $this->validateRequest($request);
+
         $serializedRequest = $this->serializer->serialize($request, 'json');
         $remoteMessage = new RemoteRequest(RemoteMessageType::ASYNC, $serializedRequest, get_class($request));
 
@@ -40,8 +48,10 @@ class RemoteRequestBus implements RemoteRequestBusInterface
     /**
      * {@inheritDoc}
      */
-    public function sync(mixed $request): mixed
+    public function sync(object $request): object
     {
+        $this->validateRequest($request);
+
         $serializedRequest = $this->serializer->serialize($request, 'json');
         $remoteMessage = new RemoteRequest(RemoteMessageType::SYNC, $serializedRequest, get_class($request));
 
@@ -54,5 +64,14 @@ class RemoteRequestBus implements RemoteRequestBusInterface
         $deserializedResponse = $this->serializer->deserialize($response, $responseType, 'json');
 
         return $deserializedResponse;
+    }
+
+    private function validateRequest(object $request)
+    {
+        $constraintViolations = $this->validator->validate($request);
+
+        if (count($constraintViolations) > 0) {
+            throw new InvalidArgumentException('Invalid request', 0, new ValidationFailedException($request, $constraintViolations));
+        }
     }
 }

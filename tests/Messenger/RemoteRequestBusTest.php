@@ -47,7 +47,7 @@ class RemoteRequestBusTest extends TestCase
 
         $client = new Client($this->httpClient, $this->serializer, $this->validator, $authenticator);
         $this->client = new ScopedClient($client, 'http://localhost/');
-        $this->remoteRequestBus = new RemoteRequestBus($this->serializer, $this->client, '/messages');
+        $this->remoteRequestBus = new RemoteRequestBus($this->serializer, $this->validator, $this->client, '/messages');
     }
 
     public function tearDown(): void

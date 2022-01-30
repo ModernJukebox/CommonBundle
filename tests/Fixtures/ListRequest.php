@@ -2,9 +2,6 @@
 
 namespace ModernJukebox\Bundle\Common\Tests\Fixtures;
 
-use ModernJukebox\Bundle\Common\Attribute\ResponseType;
-
-#[ResponseType(type: ListResponse::class)]
 class ListRequest
 {
     private string $directory;

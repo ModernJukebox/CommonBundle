@@ -2,6 +2,7 @@
 
 namespace ModernJukebox\Bundle\Common\Messenger;
 
+use ModernJukebox\Bundle\Common\Enums\RemoteMessageType;
 use ModernJukebox\Bundle\Common\Exception\RuntimeException;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Messenger\Stamp\HandledStamp;
@@ -22,39 +23,39 @@ class RemoteResponseBus implements RemoteResponseBusInterface
     /**
      * {@inheritDoc}
      */
-    public function async(mixed $request): AsyncRemoteResponseInterface
+    public function handle(RemoteRequestInterface $remoteRequest): RemoteResponseInterface
     {
+        $type = $remoteRequest->getRequestType();
+        $request = $remoteRequest->getRequest();
+        $message = $this->serializer->deserialize($request, $type, 'json');
+
         // @todo better error handling
         // @todo https://github.com/symfony/symfony/pull/39306
-        $this->messageBus->dispatch($request);
+        $envelope = $this->messageBus->dispatch($message);
 
-        return new AsyncRemoteResponse(true);
-    }
+        if (RemoteMessageType::SYNC === $remoteRequest->getRequestType()) {
+            $handledStamp = $envelope->last(HandledStamp::class);
 
-    /**
-     * {@inheritDoc}
-     */
-    public function sync(mixed $request): SyncRemoteResponseInterface
-    {
-        // @todo better error handling
-        // @todo https://github.com/symfony/symfony/pull/39306
-        $envelope = $this->messageBus->dispatch($request);
+            if (!$handledStamp) {
+                throw new RuntimeException('No HandledStamp found');
+            }
 
-        $handledStamp = $envelope->last(HandledStamp::class);
+            $responseData = $handledStamp->getResult();
 
-        if (!$handledStamp) {
-            throw new RuntimeException('No HandledStamp found');
+            if (!is_object($responseData)) {
+                throw new RuntimeException('Response must be an object');
+            }
+
+            $responseType = get_class($responseData);
+            $response = $this->serializer->serialize($responseData, 'json');
+
+            return new SyncRemoteResponse($response, $responseType);
         }
 
-        $responseData = $handledStamp->getResult();
-
-        if (!is_object($responseData)) {
-            throw new RuntimeException('Response must be an object');
+        if (RemoteMessageType::ASYNC === $remoteRequest->getRequestType()) {
+            return new AsyncRemoteResponse(true);
         }
 
-        $responseType = get_class($responseData);
-        $response = $this->serializer->serialize($responseData, 'json');
-
-        return new SyncRemoteResponse($response, $responseType);
+        throw new RuntimeException('Unknown request type');
     }
 }
