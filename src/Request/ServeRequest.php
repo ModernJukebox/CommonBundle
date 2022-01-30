@@ -7,15 +7,24 @@ use Symfony\Component\Validator\Constraints as Assert;
 class ServeRequest
 {
     #[Assert\NotBlank]
-    private string $mode;
+    private string $token;
 
-    public function __construct(string $mode)
+    #[Assert\NotBlank]
+    private string $endpoint;
+
+    public function __construct(string $token, string $endpoint)
     {
-        $this->mode = $mode;
+        $this->token = $token;
+        $this->endpoint = $endpoint;
     }
 
-    public function getMode(): string
+    public function getEndpoint(): string
     {
-        return $this->mode;
+        return $this->endpoint;
+    }
+
+    public function getToken(): string
+    {
+        return $this->token;
     }
 }
