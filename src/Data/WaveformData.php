@@ -2,6 +2,7 @@
 
 namespace ModernJukebox\Bundle\Common\Data;
 
+use Symfony\Component\Serializer\Annotation\SerializedName;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -22,9 +23,11 @@ class WaveformData
     private int $length;
 
     #[Assert\NotBlank]
+    #[SerializedName('sample_rate')]
     private int $sampleRate;
 
     #[Assert\NotBlank]
+    #[SerializedName('samples_per_pixel')]
     private int $samplesPerPixel;
 
     #[Assert\NotBlank]
